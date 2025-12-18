@@ -264,7 +264,6 @@ This demonstrates **deployment-time use** of the MoE.
 These are **engineering tradeoffs**, not conceptual deviations.
 
 ## 13. Citation
-
 If you use or reference this work, please cite the original paper:
 
 **Efficient Dynamic Ensembling for Multiple LLM Experts**
@@ -285,3 +284,6 @@ It can be extended to:
 * Larger expert pools
 * Alternative routing algorithms
 * More advanced cost models
+
+
+**AmruthSrivatsan**
