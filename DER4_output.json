@@ -1,0 +1,779 @@
+{
+  "config": {
+    "host": "http://localhost:11434",
+    "experts": [
+      "llama3.2:3b-instruct-q4_K_M",
+      "qwen2.5:3b-instruct-q4_0",
+      "mistral:instruct"
+    ],
+    "train_samples": 600,
+    "eval_samples": 300,
+    "tmax": 3,
+    "p0": 1.0,
+    "alpha": 0.005,
+    "beta": 1.2,
+    "gamma": 1.0,
+    "ppo_steps": 12000,
+    "seed": 7,
+    "cost_mode": "latency",
+    "no_repeat": true,
+    "repeat_penalty": 0.05,
+    "normalize_cost": true,
+    "calib_lat_samples": 40,
+    "ppo_device": "cpu",
+    "probe_samples": 40,
+    "save_router": "der_router_accuracy.zip",
+    "load_router": "",
+    "save_report": "run_report_accuracy.json",
+    "ollama_connect_timeout": 10,
+    "ollama_timeout": 900,
+    "ollama_retries": 3,
+    "ollama_backoff": 2.0
+  },
+  "calibration": {
+    "median_latency_sec": {
+      "llama3.2:3b-instruct-q4_K_M": 0.14122796058654785,
+      "qwen2.5:3b-instruct-q4_0": 0.11969757080078125,
+      "mistral:instruct": 0.13957786560058594
+    }
+  },
+  "begin_probe_baselines": [
+    {
+      "name": "probe_single_shot:2:mistral:instruct",
+      "accuracy_mean": 0.85,
+      "calls_mean": 1.0,
+      "latency_mean": 0.19511789679527283,
+      "cost_mean": 1.3979143179737359
+    },
+    {
+      "name": "probe_single_shot:0:llama3.2:3b-instruct-q4_K_M",
+      "accuracy_mean": 0.725,
+      "calls_mean": 1.0,
+      "latency_mean": 0.20303505659103394,
+      "cost_mean": 1.4376406467089726
+    },
+    {
+      "name": "probe_single_shot:1:qwen2.5:3b-instruct-q4_0",
+      "accuracy_mean": 0.6,
+      "calls_mean": 1.0,
+      "latency_mean": 0.1664869248867035,
+      "cost_mean": 1.390896438189177
+    }
+  ],
+  "end_results_eval": [
+    {
+      "name": "oracle:all_experts_pick_best_1step",
+      "accuracy_mean": 0.9233333333333333,
+      "calls_mean": 3.0,
+      "latency_mean": 5.852463005383809,
+      "cost_mean": 43.341435299649156
+    },
+    {
+      "name": "static:round_robin_multistep",
+      "accuracy_mean": 0.8966666666666666,
+      "calls_mean": 1.46,
+      "latency_mean": 1.341096800963084,
+      "cost_mean": 9.902947502356474
+    },
+    {
+      "name": "single_multistep:2:mistral:instruct",
+      "accuracy_mean": 0.8833333333333333,
+      "calls_mean": 1.2466666666666666,
+      "latency_mean": 0.16612836519877117,
+      "cost_mean": 1.1902199856971718
+    },
+    {
+      "name": "single_shot:2:mistral:instruct",
+      "accuracy_mean": 0.87,
+      "calls_mean": 1.0,
+      "latency_mean": 0.14353933890660603,
+      "cost_mean": 1.028381816049231
+    },
+    {
+      "name": "DER(PPO_router)_multistep",
+      "accuracy_mean": 0.8566666666666667,
+      "calls_mean": 1.44,
+      "latency_mean": 1.4909215211868285,
+      "cost_mean": 11.29868330939197
+    },
+    {
+      "name": "single_multistep:0:llama3.2:3b-instruct-q4_K_M",
+      "accuracy_mean": 0.7733333333333333,
+      "calls_mean": 1.4733333333333334,
+      "latency_mean": 0.21709243059158326,
+      "cost_mean": 1.5371774094163448
+    },
+    {
+      "name": "single_shot:0:llama3.2:3b-instruct-q4_K_M",
+      "accuracy_mean": 0.7533333333333333,
+      "calls_mean": 1.0,
+      "latency_mean": 0.14566603581110638,
+      "cost_mean": 1.031424904856845
+    },
+    {
+      "name": "single_multistep:1:qwen2.5:3b-instruct-q4_0",
+      "accuracy_mean": 0.7066666666666667,
+      "calls_mean": 1.64,
+      "latency_mean": 0.19575356165568034,
+      "cost_mean": 1.6354012896509231
+    },
+    {
+      "name": "single_shot:1:qwen2.5:3b-instruct-q4_0",
+      "accuracy_mean": 0.6633333333333333,
+      "calls_mean": 1.0,
+      "latency_mean": 0.12543826103210448,
+      "cost_mean": 1.0479599560201416
+    }
+  ],
+  "der_samples": [
+    {
+      "idx": 0,
+      "q": "Passage: Jenny Humphrey -- Rufus eventually agrees to Jenny being home-schooled after seeing how committed and good at her job she is. At work, Jenny befriends Agnes Andrews (Willa Holland), a model who convinces her to start her own fashion line. Realizing that working for Eleanor won't help her develop as a designer and that Eleanor has begun to take advantage of her talents, Jenny leaves. Jenny also begins a short relationship with Nate when they share a passionate kiss after he rescues her from being taken advantage of by an older photographer. Jenny and Rufus argue over her quitting Eleanor's and Jenny moves out of the Humphreys' apartment and moves in with Agnes, who suggests that they plan a guerrilla fashion show at the charity gala honoring Lily and Bart. The show is a big success but Vanessa witnesses her kissing Nate, thereby straining their friendship. Rufus tries to get her arrested but is stopped by Lily. Agnes's fiery temper and their growing disagreements over the clothing line make it hard for them to close a business deal. Jenny steals Agnes's contact list, attempting to make a deal by herself. Upon learning of Jenny's betrayal, Agnes burns all her dresses and kicks her out of her apartment, leaving her with nothing.\nQuestion: do jenny and nate ever date in gossip girl\nAnswer:",
+      "gold": "yes",
+      "final": "no",
+      "correct": 0,
+      "calls": 3,
+      "total_latency": 6.091328859329224,
+      "total_cost": 47.80625691667265,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 1.5047023296356201,
+          "tokens": 2,
+          "cost": 12.570867725795141,
+          "raw": "no"
+        },
+        {
+          "t": 1,
+          "pick": "mistral:instruct",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 2.590970754623413,
+          "tokens": 2,
+          "cost": 18.562905683324452,
+          "raw": "No"
+        },
+        {
+          "t": 2,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 1.9956557750701904,
+          "tokens": 2,
+          "cost": 16.67248350755306,
+          "raw": "no"
+        }
+      ]
+    },
+    {
+      "idx": 1,
+      "q": "Passage: Thread seal tape -- Thread seal tape (also known as PTFE tape or plumber's tape) is a polytetrafluoroethylene (PTFE) film tape commonly used in plumbing for sealing pipe threads. The tape is sold cut to specific widths and wound on a spool, making it easy to wind around pipe threads. It is also known by the genericized trademark Teflon tape; while Teflon is in fact identical to PTFE, Chemours (the trade-mark holders) consider this usage incorrect, especially as they no longer manufacture Teflon in tape form. Thread seal tape lubricates allowing for a deeper seating of the threads, and it helps prevent the threads from seizing when being unscrewed. The tape also works as a deformable filler and thread lubricant, helping to seal the joint without hardening or making it more difficult to tighten, and instead making it easier to tighten.\nQuestion: is thread seal tape and teflon tape the same\nAnswer:",
+      "gold": "yes",
+      "final": "no",
+      "correct": 0,
+      "calls": 3,
+      "total_latency": 4.177073240280151,
+      "total_cost": 32.41983954690717,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.13185691833496094,
+          "tokens": 2,
+          "cost": 1.1015839122952387,
+          "raw": "no"
+        },
+        {
+          "t": 1,
+          "pick": "mistral:instruct",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 2.081681728363037,
+          "tokens": 2,
+          "cost": 14.914124953880211,
+          "raw": "No"
+        },
+        {
+          "t": 2,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 1.9635345935821533,
+          "tokens": 2,
+          "cost": 16.404130680731722,
+          "raw": "no"
+        }
+      ]
+    },
+    {
+      "idx": 2,
+      "q": "Passage: 2018 FIFA World Cup qualification \u2013 UEFA Group H -- The group winners, Belgium, qualified directly for the 2018 FIFA World Cup. The group runners-up, Greece, advanced to the play-offs as one of the best 8 runners-up, where they lost to Croatia and thus failed to qualify for the first time since 2010.\nQuestion: did greece qualify for the 2018 world cup\nAnswer:",
+      "gold": "no",
+      "final": "no",
+      "correct": 1,
+      "calls": 1,
+      "total_latency": 0.11274123191833496,
+      "total_cost": 0.9418840429600356,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "no",
+          "acc": 1,
+          "latency": 0.11274123191833496,
+          "tokens": 2,
+          "cost": 0.9418840429600356,
+          "raw": "no"
+        }
+      ]
+    },
+    {
+      "idx": 3,
+      "q": "Passage: The Three Little Pigs -- The Three Little Pigs is a fable about three pigs who build three houses of different materials. A big bad wolf blows down the first two pigs' houses, made of straw and sticks respectively, but is unable to destroy the third pig's house, made of bricks. Printed versions date back to the 1840s, but the story itself is thought to be much older. The phrases used in the story, and the various morals drawn from it, have become embedded in Western culture. Many versions of The Three Little Pigs have been recreated or have been modified over the years, sometimes making the wolf a kind character. It is a type 124 folktale in the Aarne--Thompson classification system.\nQuestion: is the three little pigs a nursery rhyme\nAnswer:",
+      "gold": "no",
+      "final": "no",
+      "correct": 1,
+      "calls": 1,
+      "total_latency": 1.5611786842346191,
+      "total_cost": 11.054317273652703,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "ans": "no",
+          "gold": "no",
+          "acc": 1,
+          "latency": 1.5611786842346191,
+          "tokens": 3,
+          "cost": 11.054317273652703,
+          "raw": "No."
+        }
+      ]
+    },
+    {
+      "idx": 4,
+      "q": "Passage: Great Britain -- The island is dominated by a maritime climate with quite narrow temperature differences between seasons. Politically, Great Britain is part of the United Kingdom of Great Britain and Northern Ireland, and constitutes most of its territory. Most of England, Scotland, and Wales are on the island. The term ``Great Britain'' is often used to include the whole of England, Scotland and Wales including their component adjoining islands; and is also occasionally but contentiously applied to the UK as a whole in some contexts.\nQuestion: is northern ireland part of the great britain\nAnswer:",
+      "gold": "no",
+      "final": "no",
+      "correct": 1,
+      "calls": 1,
+      "total_latency": 2.4952735900878906,
+      "total_cost": 17.87728719987975,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "mistral:instruct",
+          "ans": "no",
+          "gold": "no",
+          "acc": 1,
+          "latency": 2.4952735900878906,
+          "tokens": 2,
+          "cost": 17.87728719987975,
+          "raw": "No"
+        }
+      ]
+    },
+    {
+      "idx": 5,
+      "q": "Passage: American Broadcasting Company -- ABC became an aggressive competitor to NBC and CBS when, continuing NBC Blue's traditions of public service, it aired symphony performances conducted by Paul Whiteman, performances from the Metropolitan Opera, and jazz concerts aired as part of its broadcast of The Chamber Music Society of Lower Basin Street announced by Milton Cross. The network also became known for such suspenseful dramas as Sherlock Holmes, Gang Busters and Counterspy, as well as several mid-afternoon youth-oriented programs. However, ABC made a name for itself by utilizing the practice of counterprogramming, with which it often placed shows of its own against the offerings of NBC and CBS, adopting the use of the Magnetophon tape recorder, brought to the U.S. from Nazi Germany after its conquest, to pre-record its programming. With the help of the Magnetophon, ABC was able to provide its stars with greater freedom in terms of time, and also attract several big names, such as Bing Crosby at a time when NBC and CBS did not allow pre-taped shows.\nQuestion: are abc and nbc owned by the same company\nAnswer:",
+      "gold": "no",
+      "final": "no",
+      "correct": 1,
+      "calls": 1,
+      "total_latency": 1.7318503856658936,
+      "total_cost": 14.468550815858244,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "no",
+          "acc": 1,
+          "latency": 1.7318503856658936,
+          "tokens": 2,
+          "cost": 14.468550815858244,
+          "raw": "no"
+        }
+      ]
+    },
+    {
+      "idx": 6,
+      "q": "Passage: Muriel's Wedding -- Muriel's Wedding is a 1994 Australian comedy-drama film written and directed by P.J. Hogan. The film, which stars actors Toni Collette, Rachel Griffiths, Jeanie Drynan, Sophie Lee, and Bill Hunter, focuses on the socially awkward Muriel whose ambition is to have a glamorous wedding and improve her personal life by moving from her dead end home town, the fictional Porpoise Spit, to Sydney.\nQuestion: is there really a porpoise spit in australia\nAnswer:",
+      "gold": "no",
+      "final": "no",
+      "correct": 1,
+      "calls": 1,
+      "total_latency": 0.11294078826904297,
+      "total_cost": 0.9435512142265281,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "no",
+          "acc": 1,
+          "latency": 0.11294078826904297,
+          "tokens": 2,
+          "cost": 0.9435512142265281,
+          "raw": "no"
+        }
+      ]
+    },
+    {
+      "idx": 7,
+      "q": "Passage: Crop rotation -- Agronomists describe the benefits to yield in rotated crops as ``The Rotation Effect''. There are many found benefits of rotation systems: however, there is no specific scientific basis for the sometimes 10-25% yield increase in a crop grown in rotation versus monoculture. The factors related to the increase are simply described as alleviation of the negative factors of monoculture cropping systems. Explanations due to improved nutrition; pest, pathogen, and weed stress reduction; and improved soil structure have been found in some cases to be correlated, but causation has not been determined for the majority of cropping systems.\nQuestion: is there a way one can grow more crops from the same land\nAnswer:",
+      "gold": "yes",
+      "final": "yes",
+      "correct": 1,
+      "calls": 2,
+      "total_latency": 2.1582999229431152,
+      "total_cost": 15.603084952980243,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.11768102645874023,
+          "tokens": 2,
+          "cost": 0.9831530052903307,
+          "raw": "no"
+        },
+        {
+          "t": 1,
+          "pick": "mistral:instruct",
+          "ans": "yes",
+          "gold": "yes",
+          "acc": 1,
+          "latency": 2.040618896484375,
+          "tokens": 2,
+          "cost": 14.619931947689912,
+          "raw": "Yes"
+        }
+      ]
+    },
+    {
+      "idx": 8,
+      "q": "Passage: Arm span -- Arm span or reach (sometimes referred to as wingspan) is the physical measurement of the length from one end of an individual's arms (measured at the fingertips) to the other when raised parallel to the ground at shoulder height at a 90\u00b0 angle. The average reach correlates to the person's height. Age and sex have to be taken into account to best predict height from arm span.\nQuestion: is the width of your arms your height\nAnswer:",
+      "gold": "yes",
+      "final": "no",
+      "correct": 0,
+      "calls": 3,
+      "total_latency": 5.66608190536499,
+      "total_cost": 44.941791321910515,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 1.9717497825622559,
+          "tokens": 2,
+          "cost": 16.472763560456368,
+          "raw": "no"
+        },
+        {
+          "t": 1,
+          "pick": "mistral:instruct",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 2.012606143951416,
+          "tokens": 2,
+          "cost": 14.419235709698139,
+          "raw": "No"
+        },
+        {
+          "t": 2,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 1.6817259788513184,
+          "tokens": 2,
+          "cost": 14.049792051756006,
+          "raw": "no"
+        }
+      ]
+    },
+    {
+      "idx": 9,
+      "q": "Passage: Central government -- A federal government is the common or national government of a federation. The United States is considered the first modern federation. After declaring independence from Britain, the U.S. adopted its first constitution, the Articles of Confederation in 1781. This was the first step towards federalism by establishing the confederal Congress. However, Congress was limited as to its ability to pursue economic, military, and judiciary reform. In 1787, a Constitutional Convention drafted the United States Constitution during the Philadelphia Convention. After the ratification of the Constitution by nine states in 1788, the U.S. was officially a federation, putting the U.S. in a unique position where the central government exists by the sufferance of the individual states rather than the reverse.\nQuestion: is the national government the same as the federal government\nAnswer:",
+      "gold": "yes",
+      "final": "no",
+      "correct": 0,
+      "calls": 3,
+      "total_latency": 1.8045847415924072,
+      "total_cost": 12.951484710068476,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 1.5459766387939453,
+          "tokens": 3,
+          "cost": 10.946675377688642,
+          "raw": "No."
+        },
+        {
+          "t": 1,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.13635730743408203,
+          "tokens": 2,
+          "cost": 1.1391819108929822,
+          "raw": "no"
+        },
+        {
+          "t": 2,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.12225079536437988,
+          "tokens": 3,
+          "cost": 0.8656274214868499,
+          "raw": "No."
+        }
+      ]
+    },
+    {
+      "idx": 10,
+      "q": "Passage: Cow tipping -- Cows routinely lie down and can easily regain their footing unless sick or injured. Scientific studies have been conducted to determine if cow tipping is theoretically possible, with varying conclusions. All agree that cows are large animals that are difficult to surprise and will generally resist attempts to be tipped. Estimates suggest a force of between 3,000 and 4,000 newtons (670 and 900 pounds-force) is needed, and that at least four and possibly as many as fourteen people would be required to achieve this. In real-life situations where cattle have to be laid on the ground, or ``cast'', such as for branding, hoof care or veterinary treatment, either rope restraints are required or specialized mechanical equipment is used that confines the cow and then tips it over. On rare occasions, cattle can lie down or fall down in proximity to a ditch or hill that restricts their normal ability to rise without help. Cow tipping has many references in popular culture and is also used as a figure of speech.\nQuestion: can a cow get up after being tipped\nAnswer:",
+      "gold": "yes",
+      "final": "yes",
+      "correct": 1,
+      "calls": 2,
+      "total_latency": 2.7242608070373535,
+      "total_cost": 19.683872259816855,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.13951706886291504,
+          "tokens": 2,
+          "cost": 1.1655797851998215,
+          "raw": "no"
+        },
+        {
+          "t": 1,
+          "pick": "mistral:instruct",
+          "ans": "yes",
+          "gold": "yes",
+          "acc": 1,
+          "latency": 2.5847437381744385,
+          "tokens": 2,
+          "cost": 18.518292474617034,
+          "raw": "Yes"
+        }
+      ]
+    },
+    {
+      "idx": 11,
+      "q": "Passage: Undergraduate degree -- An undergraduate degree (also called first degree, bachelor's degree or simply degree) is a colloquial term for an academic degree taken by a person who has completed undergraduate courses. It is usually offered at an institution of higher education, such as a university. The most common type of this degree is the bachelor's degree, which typically takes at least three or four years to complete. These degrees can be categorised as basic degrees.\nQuestion: is an undergraduate degree the same as a bachelor's degree\nAnswer:",
+      "gold": "yes",
+      "final": "yes",
+      "correct": 1,
+      "calls": 1,
+      "total_latency": 1.9353094100952148,
+      "total_cost": 16.168326534514627,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "yes",
+          "gold": "yes",
+          "acc": 1,
+          "latency": 1.9353094100952148,
+          "tokens": 2,
+          "cost": 16.168326534514627,
+          "raw": "yes"
+        }
+      ]
+    },
+    {
+      "idx": 12,
+      "q": "Passage: Once Upon a Time (season 7) -- The storyline was softly rebooted with a main narrative led by an adult Henry Mills, set several years after last season's events. In February 2018, it was announced the seventh season would serve as the final season of the series; the season and series concluded on May 18, 2018.\nQuestion: was season 7 the last season of once upon a time\nAnswer:",
+      "gold": "yes",
+      "final": "yes",
+      "correct": 1,
+      "calls": 1,
+      "total_latency": 0.10789871215820312,
+      "total_cost": 0.9014277519281024,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "yes",
+          "gold": "yes",
+          "acc": 1,
+          "latency": 0.10789871215820312,
+          "tokens": 2,
+          "cost": 0.9014277519281024,
+          "raw": "yes"
+        }
+      ]
+    },
+    {
+      "idx": 13,
+      "q": "Passage: Bald eagle -- The bald eagle has sometimes been considered the largest true raptor (accipitrid) in North America. The only larger species of raptor-like bird is the California condor (Gymnogyps californianus), a New World vulture which today is not generally considered a taxonomic ally of true accipitrids. However, the golden eagle, averaging 4.18 kg (9.2 lb) and 63 cm (25 in) in wing chord length in its American race (A. c. canadensis), is merely 455 g (1.003 lb) lighter in mean body mass and exceeds the bald eagle in mean wing chord length by around 3 cm (1.2 in). Additionally, the bald eagle's close cousins, the relatively longer-winged but shorter-tailed white-tailed eagle and the overall larger Steller's sea eagle (H. pelagicus), may, rarely, wander to coastal Alaska from Asia.\nQuestion: is the bald eagle the biggest bird in the world\nAnswer:",
+      "gold": "no",
+      "final": "no",
+      "correct": 1,
+      "calls": 1,
+      "total_latency": 1.5543475151062012,
+      "total_cost": 11.005947467135305,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "ans": "no",
+          "gold": "no",
+          "acc": 1,
+          "latency": 1.5543475151062012,
+          "tokens": 3,
+          "cost": 11.005947467135305,
+          "raw": "No."
+        }
+      ]
+    },
+    {
+      "idx": 14,
+      "q": "Passage: Verizon Communications -- Verizon's subsidiary Verizon Wireless is the largest U.S. wireless communications service provider as of September 2014, with 147 million mobile customers. And as of 2017, Verizon is the only publicly-traded telecommunications company to have two stock listings in its home country, both the NYSE (VZ; main) and Nasdaq (VZA; secondary) As of 2017, it is also the second largest telecommunications company by revenue after AT&T.\nQuestion: is verizon and verizon wireless the same company\nAnswer:",
+      "gold": "yes",
+      "final": "no",
+      "correct": 0,
+      "calls": 3,
+      "total_latency": 0.3887908458709717,
+      "total_cost": 2.916723180037676,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.14163684844970703,
+          "tokens": 3,
+          "cost": 1.0028952330789243,
+          "raw": "No."
+        },
+        {
+          "t": 1,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.1286017894744873,
+          "tokens": 2,
+          "cost": 1.074389301421378,
+          "raw": "no"
+        },
+        {
+          "t": 2,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.11855220794677734,
+          "tokens": 3,
+          "cost": 0.8394386455373738,
+          "raw": "No."
+        }
+      ]
+    },
+    {
+      "idx": 15,
+      "q": "Passage: Natural gas -- Natural gas is often informally referred to simply as ``gas'', especially when compared to other energy sources such as oil or coal. However, it is not to be confused with gasoline, especially in North America, where the term gasoline is often shortened in colloquial usage to gas.\nQuestion: is natural gas and oil the same thing\nAnswer:",
+      "gold": "no",
+      "final": "no",
+      "correct": 1,
+      "calls": 1,
+      "total_latency": 0.11325526237487793,
+      "total_cost": 0.9461784530562813,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "no",
+          "acc": 1,
+          "latency": 0.11325526237487793,
+          "tokens": 2,
+          "cost": 0.9461784530562813,
+          "raw": "no"
+        }
+      ]
+    },
+    {
+      "idx": 16,
+      "q": "Passage: Forever My Girl -- In Saint Augustine, Louisiana, Josie is left at the altar by her fianc\u00e9 Liam. Eight years later, Liam is a successful country singer. The day after a concert in New Orleans, Liam learns that Mason, one of his groomsmen from the wedding, has been killed in a car accident. Liam returns to St. Augustine and attends Mason's funeral. Although Liam attempts to be discreet, Josie recognizes him. After Mason's burial, Josie approaches Liam and punches him in the stomach.\nQuestion: does anyone die in the movie forever my girl\nAnswer:",
+      "gold": "yes",
+      "final": "yes",
+      "correct": 1,
+      "calls": 1,
+      "total_latency": 0.12139201164245605,
+      "total_cost": 1.014156016954554,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "yes",
+          "gold": "yes",
+          "acc": 1,
+          "latency": 0.12139201164245605,
+          "tokens": 2,
+          "cost": 1.014156016954554,
+          "raw": "yes"
+        }
+      ]
+    },
+    {
+      "idx": 17,
+      "q": "Passage: Joe Namath -- Joseph William Namath (/\u02c8ne\u026am\u026a\u03b8/; born May 31, 1943), nicknamed ``Broadway Joe'', is a former American football quarterback and actor. He played college football for the University of Alabama under coach Paul ``Bear'' Bryant from 1962 to 1964, and professional football in the American Football League (AFL) and National Football League (NFL) during the 1960s and 1970s. Namath was an AFL icon and played for that league's New York Jets for most of his professional football career. He finished his career with the Los Angeles Rams. He was elected to the Pro Football Hall of Fame in 1985.\nQuestion: is joe namath in the nfl hall of fame\nAnswer:",
+      "gold": "yes",
+      "final": "yes",
+      "correct": 1,
+      "calls": 2,
+      "total_latency": 2.645864248275757,
+      "total_cost": 19.105098930514632,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.12514281272888184,
+          "tokens": 2,
+          "cost": 1.045491666135509,
+          "raw": "no"
+        },
+        {
+          "t": 1,
+          "pick": "mistral:instruct",
+          "ans": "yes",
+          "gold": "yes",
+          "acc": 1,
+          "latency": 2.520721435546875,
+          "tokens": 2,
+          "cost": 18.059607264379125,
+          "raw": "Yes"
+        }
+      ]
+    },
+    {
+      "idx": 18,
+      "q": "Passage: Juris Doctor -- The Juris Doctor degree (J.D. or JD), also known as the Doctor of Jurisprudence degree (J.D., JD, D.Jur. or DJur), is a graduate-entry professional degree in law and one of several Doctor of Law degrees. It is earned by completing law school in Australia, Canada and the United States, and some other common law countries. It has the academic standing of a professional doctorate in the United States, a master's degree in Australia, and a second-entry, baccalaureate degree in Canada, (in all three jurisdictions the same as other professional degrees such as M.D. or D.D.S., the degrees required to be a practicing physician or dentist, respectively).\nQuestion: is a jd the same as a doctorate\nAnswer:",
+      "gold": "yes",
+      "final": "no",
+      "correct": 0,
+      "calls": 3,
+      "total_latency": 4.202923059463501,
+      "total_cost": 29.942016361204445,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "mistral:instruct",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.14014482498168945,
+          "tokens": 2,
+          "cost": 1.0040619576654506,
+          "raw": "No"
+        },
+        {
+          "t": 1,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 2.0267462730407715,
+          "tokens": 3,
+          "cost": 14.350885367340084,
+          "raw": "No."
+        },
+        {
+          "t": 2,
+          "pick": "mistral:instruct",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 2.03603196144104,
+          "tokens": 2,
+          "cost": 14.58706903619891,
+          "raw": "No"
+        }
+      ]
+    },
+    {
+      "idx": 19,
+      "q": "Passage: Diversity jurisdiction -- In the law of the United States, diversity jurisdiction is a form of subject-matter jurisdiction in civil procedure in which a United States district court in the federal judiciary has the power to hear a civil case when the amount in controversy exceeds $75,000 and where the persons that are parties are ``diverse'' in citizenship or state of incorporation (for corporations being legal persons), which generally indicates that they differ in state and/or nationality. Diversity jurisdiction and federal-question jurisdiction (jurisdiction over issues arising under federal law) constitute the two primary categories of subject matter jurisdiction in U.S. federal courts.\nQuestion: can a federal court hear a state law case\nAnswer:",
+      "gold": "yes",
+      "final": "no",
+      "correct": 0,
+      "calls": 3,
+      "total_latency": 3.342451572418213,
+      "total_cost": 25.211835585236585,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 2.011108875274658,
+          "tokens": 3,
+          "cost": 14.24016085003368,
+          "raw": "No."
+        },
+        {
+          "t": 1,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 1.2128794193267822,
+          "tokens": 2,
+          "cost": 10.132865781757918,
+          "raw": "no"
+        },
+        {
+          "t": 2,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "ans": "no",
+          "gold": "yes",
+          "acc": 0,
+          "latency": 0.11846327781677246,
+          "tokens": 3,
+          "cost": 0.8388089534449897,
+          "raw": "No."
+        }
+      ]
+    }
+  ],
+  "train_time_sec": 17265.65146422386,
+  "timestamp": "2025-12-19 02:00:02"
+}
