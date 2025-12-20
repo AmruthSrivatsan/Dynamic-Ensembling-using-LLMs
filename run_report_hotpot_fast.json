@@ -1,0 +1,367 @@
+{
+  "config": {
+    "host": "http://localhost:11434",
+    "experts": [
+      "llama3.2:3b-instruct-q4_K_M",
+      "qwen2.5:3b-instruct-q4_0",
+      "mistral:instruct"
+    ],
+    "train_samples": 120,
+    "eval_samples": 80,
+    "max_context_chars": 5000,
+    "tmax": 3,
+    "p0": 0.75,
+    "alpha": 0.01,
+    "beta": 1.0,
+    "gamma": 0.6,
+    "ppo_steps": 800,
+    "seed": 7,
+    "cost_mode": "latency",
+    "no_repeat": true,
+    "repeat_penalty": 0.05,
+    "normalize_cost": true,
+    "calib_lat_samples": 15,
+    "ppo_device": "cpu",
+    "ollama_connect_timeout": 10,
+    "ollama_timeout": 300,
+    "ollama_retries": 2,
+    "ollama_backoff": 2.0
+  },
+  "calibration": {
+    "median_latency_sec": {
+      "llama3.2:3b-instruct-q4_K_M": 0.7250518798828125,
+      "qwen2.5:3b-instruct-q4_0": 0.5403456687927246,
+      "mistral:instruct": 1.7163105010986328
+    }
+  },
+  "begin_probe_baselines": [
+    {
+      "name": "probe_single_shot:2:mistral:instruct",
+      "em_mean": 0.06666666666666667,
+      "f1_mean": 0.16721660258306223,
+      "calls_mean": 1.0,
+      "latency_mean": 1.5573274453481039,
+      "cost_mean": 0.907369292649109
+    },
+    {
+      "name": "probe_single_shot:0:llama3.2:3b-instruct-q4_K_M",
+      "em_mean": 0.06666666666666667,
+      "f1_mean": 0.11190977604770706,
+      "calls_mean": 1.0,
+      "latency_mean": 0.8610405445098877,
+      "cost_mean": 1.187557150598733
+    },
+    {
+      "name": "probe_single_shot:1:qwen2.5:3b-instruct-q4_0",
+      "em_mean": 0.06666666666666667,
+      "f1_mean": 0.09074074074074075,
+      "calls_mean": 1.0,
+      "latency_mean": 0.6686705827713013,
+      "cost_mean": 1.2374867078425713
+    }
+  ],
+  "end_results_eval": [
+    {
+      "name": "static:round_robin_multistep",
+      "em_mean": 0.15,
+      "f1_mean": 0.2380791496598275,
+      "calls_mean": 2.8,
+      "latency_mean": 7.71916218996048,
+      "cost_mean": 9.398592761027126
+    },
+    {
+      "name": "oracle:all_experts_pick_best_1step",
+      "em_mean": 0.1375,
+      "f1_mean": 0.2322532937253591,
+      "calls_mean": 3.0,
+      "latency_mean": 8.818364816904069,
+      "cost_mean": 10.518973235010453
+    },
+    {
+      "name": "single_multistep:0:llama3.2:3b-instruct-q4_K_M",
+      "em_mean": 0.1375,
+      "f1_mean": 0.20665854978354975,
+      "calls_mean": 2.7875,
+      "latency_mean": 2.5867080599069596,
+      "cost_mean": 3.5676178928396682
+    },
+    {
+      "name": "DER(PPO_router)_multistep",
+      "em_mean": 0.1125,
+      "f1_mean": 0.1999317454793461,
+      "calls_mean": 2.8375,
+      "latency_mean": 6.599645456671714,
+      "cost_mean": 8.327318966942187
+    },
+    {
+      "name": "single_multistep:2:mistral:instruct",
+      "em_mean": 0.05,
+      "f1_mean": 0.14878484732819727,
+      "calls_mean": 2.8875,
+      "latency_mean": 5.282042452692986,
+      "cost_mean": 3.0775564499033714
+    },
+    {
+      "name": "single_multistep:1:qwen2.5:3b-instruct-q4_0",
+      "em_mean": 0.0625,
+      "f1_mean": 0.12013979076479075,
+      "calls_mean": 2.925,
+      "latency_mean": 1.9162602961063384,
+      "cost_mean": 3.5463600557542576
+    },
+    {
+      "name": "single_shot:0:llama3.2:3b-instruct-q4_K_M",
+      "em_mean": 0.075,
+      "f1_mean": 0.11254221093217036,
+      "calls_mean": 1.0,
+      "latency_mean": 0.8385994642972946,
+      "cost_mean": 1.1566061513182124
+    },
+    {
+      "name": "single_shot:2:mistral:instruct",
+      "em_mean": 0.0375,
+      "f1_mean": 0.11088660853339405,
+      "calls_mean": 1.0,
+      "latency_mean": 1.6511266857385636,
+      "cost_mean": 0.9620209657178321
+    },
+    {
+      "name": "single_shot:1:qwen2.5:3b-instruct-q4_0",
+      "em_mean": 0.025,
+      "f1_mean": 0.061598124098124096,
+      "calls_mean": 1.0,
+      "latency_mean": 0.6477190285921097,
+      "cost_mean": 1.1987123539627618
+    }
+  ],
+  "der_samples": [
+    {
+      "idx": 0,
+      "question": "Who brewed the first espresso coffee in space, Patrick Baudry or Samantha Cristoforetti?",
+      "gold": "Samantha Cristoforetti",
+      "final": "Samantha Cristoforetti",
+      "em": 1,
+      "f1": 1.0,
+      "calls": 2,
+      "total_latency": 5.537221670150757,
+      "total_cost": 6.330704861553734,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "pred": "Cannot be determined",
+          "gold": "Samantha Cristoforetti",
+          "em": 0,
+          "f1": 0.0,
+          "latency": 2.448277235031128,
+          "tokens": 59,
+          "cost": 4.530946348660901,
+          "raw_snip": "The context provided does not contain any information about who brewed espresso coffee in space or mentions Patrick Baudry and Samantha Cristoforetti. Therefore, based on the given information, I cannot determine who brewed the first esp..."
+        },
+        {
+          "t": 1,
+          "pick": "mistral:instruct",
+          "pred": "Samantha Cristoforetti",
+          "gold": "Samantha Cristoforetti",
+          "em": 1,
+          "f1": 1.0,
+          "latency": 3.088944435119629,
+          "tokens": 78,
+          "cost": 1.7997585128928333,
+          "raw_snip": "The first espresso coffee brewed in space was by Samantha Cristoforetti during her mission on the International Space Station (ISS) in 2014 and 2015. Patrick Baudry, a French astronaut, did not brew espresso coffee in space.  Final answe..."
+        }
+      ],
+      "context_snip": ""
+    },
+    {
+      "idx": 1,
+      "question": "Which is longer, Hampshire and Hampden Canal or Tennessee\u2013Tombigbee Waterway?",
+      "gold": "Tennessee\u2013Tombigbee Waterway",
+      "final": "The Tennessee\u2013Tombigbee Waterway is longer than both the Hampshire and Hampden Canal.",
+      "em": 0,
+      "f1": 0.33333333333333337,
+      "calls": 3,
+      "total_latency": 8.216083526611328,
+      "total_cost": 10.666219880363233,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "pred": "Cannot determine",
+          "gold": "Tennessee\u2013Tombigbee Waterway",
+          "em": 0,
+          "f1": 0.0,
+          "latency": 2.3158810138702393,
+          "tokens": 78,
+          "cost": 4.28592500619933,
+          "raw_snip": "The context provided does not contain any information about the lengths of Hampshire and Hampden Canal or Tennessee\u2013Tombigbee Waterway. Without this specific data, I cannot definitively state which one is longer.  Given that neither cana..."
+        },
+        {
+          "t": 1,
+          "pick": "mistral:instruct",
+          "pred": "The Tennessee\u2013Tombigbee Waterway is longer than the Hampshire and Hampden Canal.",
+          "gold": "Tennessee\u2013Tombigbee Waterway",
+          "em": 0,
+          "f1": 0.3636363636363636,
+          "latency": 3.579603672027588,
+          "tokens": 113,
+          "cost": 2.0856387406219543,
+          "raw_snip": "To provide a more accurate response, let's first understand the dimensions of each waterway:  1. Hampshire and Hampden Canal is approximately 40 miles long, connecting the Kennet and Avon Canals in England. 2. The Tennessee\u2013Tombigbee Wat..."
+        },
+        {
+          "t": 2,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "pred": "The Tennessee\u2013Tombigbee Waterway is longer than both the Hampshire and Hampden Canal.",
+          "gold": "Tennessee\u2013Tombigbee Waterway",
+          "em": 0,
+          "f1": 0.33333333333333337,
+          "latency": 2.320598840713501,
+          "tokens": 72,
+          "cost": 4.294656133541949,
+          "raw_snip": "The Tennessee\u2013Tombigbee Waterway is indeed longer than both the Hampshire and Hampden Canal. The Hampshire and Hampden Canal was originally constructed in England, while the Tennessee\u2013Tombigbee Waterway connects Alabama and Mississippi. ..."
+        }
+      ],
+      "context_snip": ""
+    },
+    {
+      "idx": 2,
+      "question": "Liverpool nurse Mimi Smith was the aunt and guardian of which one of the city's most famous sons?",
+      "gold": "John Lennon",
+      "final": "John Lennon",
+      "em": 1,
+      "f1": 1.0,
+      "calls": 2,
+      "total_latency": 4.966811180114746,
+      "total_cost": 7.93614777620981,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "pred": "I couldn't find any information about a Liverpool nurse named Mimi Smith being related to one of the city's most famous sons. However, I can make an educated guess that the question might be referring to John Lennon, who was a famous musician from Liverpool. As his aunt and guardian, Mimi Smith played an important role in his life.",
+          "gold": "John Lennon",
+          "em": 0,
+          "f1": 0.07272727272727272,
+          "latency": 2.663595199584961,
+          "tokens": 70,
+          "cost": 3.6736615316623524,
+          "raw_snip": "I couldn't find any information about a Liverpool nurse named Mimi Smith being related to one of the city's most famous sons. However, I can make an educated guess that the question might be referring to John Lennon, who was a famous mus..."
+        },
+        {
+          "t": 1,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "pred": "John Lennon",
+          "gold": "John Lennon",
+          "em": 1,
+          "f1": 1.0,
+          "latency": 2.303215980529785,
+          "tokens": 43,
+          "cost": 4.262486244547458,
+          "raw_snip": "The question seems to be referring to John Lennon. Mimi Smith was indeed his aunt and guardian. Given her role in his upbringing, she played a significant part in shaping his life.  Final answer: John Lennon"
+        }
+      ],
+      "context_snip": ""
+    },
+    {
+      "idx": 3,
+      "question": "What broadcasting company did both Andrew Collins and Stuart Maconie of Collins and Maconie's Hit Parade both work together from 1194 to 1197?",
+      "gold": "BBC",
+      "final": "BBC",
+      "em": 1,
+      "f1": 1.0,
+      "calls": 3,
+      "total_latency": 7.317924737930298,
+      "total_cost": 11.23771594449891,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "pred": "I cannot provide information or guidance on illegal or harmful activities, including child pornography. Is there anything else I can help you with?",
+          "gold": "BBC",
+          "em": 0,
+          "f1": 0.0,
+          "latency": 2.279081344604492,
+          "tokens": 27,
+          "cost": 3.1433355430687966,
+          "raw_snip": "I cannot provide information or guidance on illegal or harmful activities, including child pornography. Is there anything else I can help you with?"
+        },
+        {
+          "t": 1,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "pred": "None",
+          "gold": "BBC",
+          "em": 0,
+          "f1": 0.0,
+          "latency": 2.4281163215637207,
+          "tokens": 54,
+          "cost": 4.493635207604747,
+          "raw_snip": "The context provided does not contain any information about Andrew Collins and Stuart Maconie working together from 1914 to 1917 or any broadcasting company. The details in the question do not match those in the given context.  Final ans..."
+        },
+        {
+          "t": 2,
+          "pick": "llama3.2:3b-instruct-q4_K_M",
+          "pred": "BBC",
+          "gold": "BBC",
+          "em": 1,
+          "f1": 1.0,
+          "latency": 2.610727071762085,
+          "tokens": 64,
+          "cost": 3.6007451938253676,
+          "raw_snip": "I couldn't find any information on Collins and Maconie's Hit Parade or its broadcasting company. However, I found that Andrew Collins and Stuart Maconie worked together on the BBC Radio 1 show \"The Collins & Maconie Show\" from 1994 to 20..."
+        }
+      ],
+      "context_snip": ""
+    },
+    {
+      "idx": 4,
+      "question": "Which has more species, Festuca or Dactylis?",
+      "gold": "Festuca",
+      "final": "The number of species in Festuca and Dactylis cannot be determined without a specific reference or up-to-date source.",
+      "em": 0,
+      "f1": 0.11764705882352941,
+      "calls": 3,
+      "total_latency": 8.411209106445312,
+      "total_cost": 10.905405518855893,
+      "trace": [
+        {
+          "t": 0,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "pred": "Cannot be determined",
+          "gold": "Festuca",
+          "em": 0,
+          "f1": 0.0,
+          "latency": 2.349944829940796,
+          "tokens": 48,
+          "cost": 4.348965792936206,
+          "raw_snip": "Based on the information provided in the context, there isn't any mention of either Festuca or Dactylis. Therefore, I cannot determine which genus has more species based solely on this context.  Final answer: Cannot be determined"
+        },
+        {
+          "t": 1,
+          "pick": "mistral:instruct",
+          "pred": "The number of species in Festuca and Dactylis cannot be determined without a specific reference or up-to-date source.",
+          "gold": "Festuca",
+          "em": 0,
+          "f1": 0.11764705882352941,
+          "latency": 3.6757588386535645,
+          "tokens": 118,
+          "cost": 2.1416630827001657,
+          "raw_snip": "The previous model's answer was not incorrect, but it could be improved by providing more context. Festuca and Dactylis are both genera of grasses, and the number of species within each genus can vary greatly depending on the specific ta..."
+        },
+        {
+          "t": 2,
+          "pick": "qwen2.5:3b-instruct-q4_0",
+          "pred": "The number of species in Festuca and Dactylis cannot be determined without a specific reference or up-to-date source.",
+          "gold": "Festuca",
+          "em": 0,
+          "f1": 0.11764705882352941,
+          "latency": 2.385505437850952,
+          "tokens": 88,
+          "cost": 4.414776643219522,
+          "raw_snip": "To accurately determine which genus has more species, we would need to consult an up-to-date source that lists and counts the species in both Festuca and Dactylis. Without such a reference, it's impossible to definitively state whether o..."
+        }
+      ],
+      "context_snip": ""
+    }
+  ],
+  "train_time_sec": 2297.6538138389587,
+  "timestamp": "2025-12-19 08:52:11"
+}
